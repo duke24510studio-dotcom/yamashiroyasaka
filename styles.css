@@ -1,5 +1,5 @@
 import { getCurrentAppConfig } from './app-configs.js';
-import { getConfiguredCsvSource, loadRecords, parseRecordCsv } from './data.js';
+import { getConfiguredCsvSource, loadRecords, parseRecordCsv, readCsvFile } from './data.js';
 import { applyFilters, describeActiveFilters, populateFilters, setupFilters } from './filters.js';
 import { focusMarker, initMap, renderMarkers } from './map.js';
 
@@ -49,10 +49,13 @@ let selectedId = null;
 let activeSource = getConfiguredCsvSource(appConfig.id);
 
 applyAppText();
-await initMap();
+initMap();
 setupFilters(elements, render);
 elements.printButton.addEventListener('click', () => window.print());
 elements.reloadButton.addEventListener('click', () => loadConfiguredSource());
+elements.csvInput.addEventListener('click', () => {
+  elements.csvInput.value = '';
+});
 elements.csvInput.addEventListener('change', loadUserCsv);
 
 await loadConfiguredSource();
@@ -62,8 +65,9 @@ async function loadConfiguredSource() {
     setSourceStatus(activeSource.label, `${appConfig.sourceName}を読み込んでいます。`);
     records = await loadRecords(activeSource.source);
     selectedId = null;
+    resetFilterValues();
     populateFilters(records, elements);
-    setSourceStatus(activeSource.label, `${records.length}件の${appConfig.sourceName}を読み込みました。`);
+    setSourceStatus(activeSource.label, loadedMessage(records.length));
     render();
   } catch (error) {
     showEmptyState('CSVを読み込めませんでした。READMEの手順と公開URLを確認してください。');
@@ -182,12 +186,29 @@ async function loadUserCsv(event) {
   const [file] = event.target.files;
   if (!file) return;
 
-  records = parseRecordCsv(await file.text());
+  records = parseRecordCsv(await readCsvFile(file));
   selectedId = null;
-  activeSource = { source: file.name, label: '手元のCSVファイル' };
+  activeSource = { source: file.name, label: `手元のCSVファイル: ${file.name}` };
+  resetFilterValues();
   populateFilters(records, elements);
-  setSourceStatus(activeSource.label, `${records.length}件の${appConfig.sourceName}を読み込みました。`);
+  setSourceStatus(activeSource.label, loadedMessage(records.length));
   render();
+}
+
+function loadedMessage(count) {
+  if (count === 0) {
+    return '0件です。CSVの列名、緯度、経度を確認してください。';
+  }
+
+  return `${count}件の${appConfig.sourceName}を読み込みました。`;
+}
+
+function resetFilterValues() {
+  elements.yearFilter.value = 'all';
+  elements.monthFilter.value = 'all';
+  elements.typeFilter.value = 'all';
+  elements.categoryFilter.value = 'all';
+  elements.searchInput.value = '';
 }
 
 function applyAppText() {
@@ -246,4 +267,3 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
 }
-
