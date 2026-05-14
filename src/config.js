@@ -1,23 +1,17 @@
-export const DATA_SOURCES = {
-  accidents: {
-    localCsvPath: './data/accidents.csv',
-    remoteCsvUrl: '',
-  },
-  violations: {
-    localCsvPath: './data/violations.csv',
-    remoteCsvUrl: '',
-  },
-  enforcement: {
-    localCsvPath: './data/enforcement.csv',
-    remoteCsvUrl: '',
-  },
-  pickups: {
-    localCsvPath: './data/pickups.csv',
-    remoteCsvUrl: '',
-  },
+// 山城ヤサカ交通マップ — 設定ファイル
+// このファイルを書き換えるだけでデータ元と地図背景を切り替えられます。
+
+// 各ページが読み込むCSVの場所。
+// 同梱の data/*.csv を差し替えるか、Googleスプレッドシートの
+// 「ファイル → 共有 → ウェブに公開（CSV）」で発行したURLを貼り付けてください。
+export const CSV_SOURCES = {
+  accidents: './data/accidents.csv',
+  violations: './data/violations.csv',
+  enforcement: './data/enforcement.csv',
+  pickups: './data/pickups.csv',
 };
 
-// MapTiler FreeプランのAPIキーを設定すると、地図背景がMapTilerタイルに切り替わります。
-// 未設定の場合はOpenStreetMapタイルを表示します。
+// MapTiler Cloud Freeプランで取得したAPIキー。
+// 空文字列の場合は OpenStreetMap タイルを表示します。
 export const MAPTILER_API_KEY = '9sTROwglaOlAzPTK2UxJ';
 export const MAPTILER_MAP_STYLE = 'basic-v2';
