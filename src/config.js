@@ -7,8 +7,6 @@
 export const CSV_SOURCES = {
   accidents: './data/accidents.csv',
   violations: './data/violations.csv',
-  enforcement: './data/enforcement.csv',
-  pickups: './data/pickups.csv',
 };
 
 // MapTiler Cloud Freeプランで取得したAPIキー。
