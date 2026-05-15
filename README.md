@@ -10,15 +10,17 @@
 ├── violations.html    交通違反マップ
 ├── enforcement.html   取り締まり情報マップ
 ├── pickups.html       お客様の乗車位置マップ
+├── components.html    UIコンポーネントライブラリ（ショーケース）
 ├── data/              4ページが読み込むCSV（書き換えればそのまま反映）
 │   ├── accidents.csv
 │   ├── violations.csv
 │   ├── enforcement.csv
 │   └── pickups.csv
 └── src/
-    ├── config.js      CSVの場所とMapTilerキーだけを書く設定ファイル
-    ├── app.js         アプリ本体（地図・絞り込み・集計・一覧）
-    └── styles.css     スタイル
+    ├── config.js       CSVの場所とMapTilerキーだけを書く設定ファイル
+    ├── app.js          アプリ本体（地図・絞り込み・集計・一覧）
+    ├── styles.css      4ページ共通スタイル
+    └── components.css  汎用UIコンポーネント（ボタン・カード・フォーム など）
 ```
 
 ビルド不要・依存パッケージなし。CSVを差し替えれば常に最新内容が読み込まれます（毎回キャッシュを回避して取得）。
@@ -92,6 +94,34 @@ http://localhost:8000/index.html?csv=https%3A%2F%2Fexample.com%2Faccidents.csv
 ```
 
 外部CSVを使う場合、公開元がブラウザからの読み込みを許可している必要があります。Googleスプレッドシートの「ウェブに公開」CSVはこの用途に向いています。
+
+## コンポーネントライブラリ
+
+`components.html` は、サイト全体で使うUI部品の一覧と利用例を集めたショーケースページです。各ページのナビ「部品」からも開けます。
+
+- スタイルは [`src/components.css`](./src/components.css) に独立。既存の `styles.css` が定義するテーマ変数（`--accent` `--panel` `--line` など）に乗ります。
+- ショーケース右上のボタンで4テーマ（事故 / 違反 / 取り締まり / 乗車位置）の配色を切り替えて確認できます。
+- すべての部品クラスは `c-` プレフィックス付きで、既存ページのスタイルとは衝突しません。
+
+含まれる部品：
+
+| 種類 | 主なクラス |
+| --- | --- |
+| ボタン | `.c-btn` `.c-btn--secondary` `.c-btn--ghost` `.c-btn--danger` `.c-btn-group` |
+| バッジ | `.c-badge` `.c-badge--success` `.c-badge--warning` `.c-badge--danger` |
+| カード | `.c-card` `.c-card--accent` `.c-stat`（統計カード） |
+| フォーム | `.c-field` `.c-input` `.c-select` `.c-textarea` `.c-check` `.c-switch` |
+| アラート | `.c-alert` `.c-alert--warning` `.c-alert--danger` `.c-alert--success` |
+| テーブル | `.c-table` `.c-table-wrap` |
+| ナビ | `.c-tabs` `.c-pills` `.c-breadcrumb` |
+| その他 | `.c-progress` `.c-avatar` `.c-tooltip` `.c-modal` `.c-skeleton` |
+
+新しいページでこれらを使う場合は、`styles.css` の後に `components.css` を読み込んでください。
+
+```html
+<link rel="stylesheet" href="./src/styles.css">
+<link rel="stylesheet" href="./src/components.css">
+```
 
 ## GitHub Pagesで公開する
 
