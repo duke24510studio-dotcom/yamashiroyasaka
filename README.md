@@ -8,7 +8,6 @@
 .
 ├── index.html
 ├── violations.html
-├── components.html
 ├── data/
 │   ├── accidents.csv
 │   └── violations.csv
@@ -16,7 +15,7 @@
     ├── config.js
     ├── app.js
     ├── styles.css
-    └── components.css
+    └── styles.css
 ```
 
 ビルド不要・依存パッケージ不要です。CSVを差し替えれば、サイト側の「再読み込み」で最新内容を読み込みます。
@@ -45,7 +44,6 @@ python -m http.server 8000
 | --- | --- | --- |
 | 交通事故発生マップ | `index.html` | `data/accidents.csv` |
 | 交通違反マップ | `violations.html` | `data/violations.csv` |
-| UI部品 | `components.html` | なし |
 
 ## CSVを更新する
 
@@ -123,4 +121,3 @@ CSVには運転者名、乗客名、連絡先、車両番号、予約者名な�
 
 - MapLibre GL JS 5.12.0
 - MapTiler
-
