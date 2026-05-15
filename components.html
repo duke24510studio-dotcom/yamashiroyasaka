@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>コンポーネントライブラリ | 山城ヤサカ交通</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <link rel="stylesheet" href="./src/components.css">
+    <style>
+      /* showcase-only layout */
+      body { padding-bottom: 60px; }
+      .showcase-main {
+        padding: 24px clamp(12px, 3vw, 32px);
+        display: grid;
+        gap: 28px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .showcase-section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+      .showcase-section > h2 {
+        margin: 0 0 4px;
+        font-size: 1.1rem;
+      }
+      .showcase-section > p.lede {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .showcase-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .showcase-row:last-child { margin-bottom: 0; }
+      .showcase-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .showcase-toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 16px clamp(12px, 3vw, 32px);
+        background: color-mix(in srgb, var(--accent) 6%, var(--panel));
+        border-bottom: 1px solid var(--line);
+      }
+      .showcase-toc a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+      .theme-picker {
+        display: flex;
+        gap: 6px;
+      }
+      .theme-picker button {
+        min-height: 32px;
+        padding: 0 12px;
+        font-size: 0.82rem;
+      }
+      code.token {
+        background: color-mix(in srgb, var(--muted) 14%, var(--panel));
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+      }
+      .swatch {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+      .swatch__chip {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,0,0,0.08);
+      }
+      .swatch small {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+    </style>
+  </head>
+  <body data-app="components" class="theme-accidents">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">山城ヤサカ交通 デザインシステム</p>
+        <h1>コンポーネントライブラリ</h1>
+      </div>
+      <div class="header-actions theme-picker" role="group" aria-label="テーマ切り替え">
+        <button type="button" data-theme="theme-accidents" aria-pressed="true">事故</button>
+        <button type="button" data-theme="theme-violations" aria-pressed="false">違反</button>
+        <button type="button" data-theme="theme-enforcement" aria-pressed="false">取り締まり</button>
+        <button type="button" data-theme="theme-pickups" aria-pressed="false">乗車位置</button>
+      </div>
+    </header>
+
+    <nav class="showcase-toc" aria-label="セクション">
+      <a href="#tokens">トークン</a>
+      <a href="#buttons">ボタン</a>
+      <a href="#badges">バッジ</a>
+      <a href="#cards">カード</a>
+      <a href="#stats">統計</a>
+      <a href="#forms">フォーム</a>
+      <a href="#alerts">アラート</a>
+      <a href="#tables">テーブル</a>
+      <a href="#nav">ナビ</a>
+      <a href="#progress">プログレス</a>
+      <a href="#avatars">アバター</a>
+      <a href="#tooltip">ツールチップ</a>
+      <a href="#modal">モーダル</a>
+      <a href="#skeleton">スケルトン</a>
+    </nav>
+
+    <main class="showcase-main">
+
+      <section class="showcase-section" id="tokens">
+        <h2>カラートークン</h2>
+        <p class="lede">ヘッダ右上のボタンでテーマを切り替えて配色の差分を確認できます。</p>
+        <div class="showcase-grid">
+          <div class="swatch"><span class="swatch__chip" style="background:var(--bg)"></span><div><strong>--bg</strong><small>背景</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--panel)"></span><div><strong>--panel</strong><small>パネル</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--ink)"></span><div><strong>--ink</strong><small>本文</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--muted)"></span><div><strong>--muted</strong><small>補助テキスト</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--line)"></span><div><strong>--line</strong><small>区切り線</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--accent)"></span><div><strong>--accent</strong><small>アクセント</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--accent-dark)"></span><div><strong>--accent-dark</strong><small>濃いアクセント</small></div></div>
+          <div class="swatch"><span class="swatch__chip" style="background:var(--warning)"></span><div><strong>--warning</strong><small>注意</small></div></div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="buttons">
+        <h2>ボタン</h2>
+        <p class="lede"><code class="token">.c-btn</code> + バリアント（<code class="token">--secondary</code> / <code class="token">--ghost</code> / <code class="token">--danger</code>）とサイズ（<code class="token">--sm</code> / <code class="token">--lg</code>）。</p>
+        <div class="showcase-row">
+          <button class="c-btn">主要アクション</button>
+          <button class="c-btn c-btn--secondary">補助</button>
+          <button class="c-btn c-btn--ghost">ゴースト</button>
+          <button class="c-btn c-btn--danger">削除</button>
+          <button class="c-btn" disabled>無効</button>
+        </div>
+        <div class="showcase-row">
+          <button class="c-btn c-btn--sm">小</button>
+          <button class="c-btn">標準</button>
+          <button class="c-btn c-btn--lg">大</button>
+        </div>
+        <div class="showcase-row">
+          <div class="c-btn-group" role="group" aria-label="表示切替">
+            <button class="c-btn" aria-pressed="true">地図</button>
+            <button class="c-btn" aria-pressed="false">一覧</button>
+            <button class="c-btn" aria-pressed="false">集計</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="badges">
+        <h2>バッジ / タグ</h2>
+        <p class="lede">ステータスやカテゴリの注記に使います。</p>
+        <div class="showcase-row">
+          <span class="c-badge">通常</span>
+          <span class="c-badge c-badge--neutral">中立</span>
+          <span class="c-badge c-badge--success">完了</span>
+          <span class="c-badge c-badge--warning">要確認</span>
+          <span class="c-badge c-badge--danger">重大</span>
+          <span class="c-badge c-badge--solid c-badge--no-dot">SOLID</span>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="cards">
+        <h2>カード</h2>
+        <p class="lede">汎用カードとアクセント付きカード。</p>
+        <div class="showcase-grid">
+          <article class="c-card">
+            <h3 class="c-card__title">運行ブリーフィング</h3>
+            <p class="c-card__meta">2026-05-15 朝礼</p>
+            <p class="c-card__body">宇治橋西詰交差点で渋滞による追突が増加傾向。雨天時の車間距離を再確認。</p>
+            <footer class="c-card__footer">
+              <button class="c-btn c-btn--ghost c-btn--sm">詳細</button>
+              <button class="c-btn c-btn--sm">確認済み</button>
+            </footer>
+          </article>
+          <article class="c-card c-card--accent">
+            <h3 class="c-card__title">重点ポイント</h3>
+            <p class="c-card__meta">後退時接触の再発防止</p>
+            <p class="c-card__body">夜間後退時はミラーとバックモニターを複数回確認。必要に応じて誘導者を立てる。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="stats">
+        <h2>統計カード</h2>
+        <p class="lede">既存の集計サマリーと互換のスタイル。</p>
+        <div class="showcase-grid">
+          <article class="c-stat">
+            <span class="c-stat__label">表示件数</span>
+            <strong class="c-stat__value">128</strong>
+            <span class="c-stat__delta c-stat__delta--down">前月比 -12</span>
+          </article>
+          <article class="c-stat">
+            <span class="c-stat__label">最多カテゴリ</span>
+            <strong class="c-stat__value">後退時接触</strong>
+            <span class="c-stat__delta">42件</span>
+          </article>
+          <article class="c-stat">
+            <span class="c-stat__label">最多時間帯</span>
+            <strong class="c-stat__value">17時台</strong>
+            <span class="c-stat__delta c-stat__delta--up">前月比 +5</span>
+          </article>
+          <article class="c-stat">
+            <span class="c-stat__label">重点場所</span>
+            <strong class="c-stat__value">宇治橋西詰</strong>
+            <span class="c-stat__delta">11件</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="forms">
+        <h2>フォーム</h2>
+        <p class="lede">入力欄、セレクト、検索、チェックボックス、スイッチ。</p>
+        <div class="showcase-grid">
+          <label class="c-field">
+            <span class="c-label">場所</span>
+            <input class="c-input" type="text" placeholder="例: 宇治橋西詰">
+            <span class="c-field__hint">乗務員が報告した地名で検索します。</span>
+          </label>
+          <label class="c-field">
+            <span class="c-label">カテゴリ</span>
+            <select class="c-select">
+              <option>すべて</option>
+              <option>後退時接触</option>
+              <option>追突</option>
+              <option>歩行者接触</option>
+            </select>
+          </label>
+          <label class="c-field">
+            <span class="c-label">概要</span>
+            <textarea class="c-textarea" placeholder="再発防止のための気づきを記入"></textarea>
+          </label>
+          <label class="c-field">
+            <span class="c-label">日付（エラー例）</span>
+            <input class="c-input c-input--invalid" type="text" value="2026/13/01">
+            <span class="c-field__error">日付の形式が不正です。</span>
+          </label>
+        </div>
+        <hr class="c-divider">
+        <div class="showcase-row">
+          <label class="c-check"><input type="checkbox" checked> 注意喚起済み</label>
+          <label class="c-check"><input type="checkbox"> 誘導者確認</label>
+          <label class="c-switch">
+            <input type="checkbox" checked>
+            <span class="c-switch__track"></span>
+          </label>
+          <span style="color:var(--muted);font-size:0.85rem;">夜間モード</span>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="alerts">
+        <h2>アラート</h2>
+        <p class="lede">情報、注意、エラー、成功の4種。</p>
+        <div style="display:grid;gap:10px;">
+          <div class="c-alert">
+            <span class="c-alert__icon" aria-hidden="true">i</span>
+            <div>
+              <p class="c-alert__title">CSVを再読み込みしました</p>
+              <p class="c-alert__body">最新の <code>data/accidents.csv</code> から128件を取得しました。</p>
+            </div>
+          </div>
+          <div class="c-alert c-alert--warning">
+            <span class="c-alert__icon" aria-hidden="true">!</span>
+            <div>
+              <p class="c-alert__title">緯度経度が空のレコードがあります</p>
+              <p class="c-alert__body">3件が地図上に表示されていません。CSVを確認してください。</p>
+            </div>
+          </div>
+          <div class="c-alert c-alert--danger">
+            <span class="c-alert__icon" aria-hidden="true">!</span>
+            <div>
+              <p class="c-alert__title">読み込みに失敗しました</p>
+              <p class="c-alert__body">指定したURLからCSVを取得できませんでした。公開設定を確認してください。</p>
+            </div>
+          </div>
+          <div class="c-alert c-alert--success">
+            <span class="c-alert__icon" aria-hidden="true">✓</span>
+            <div>
+              <p class="c-alert__title">点呼完了</p>
+              <p class="c-alert__body">本日分の安全確認はすべて記録されました。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="tables">
+        <h2>テーブル</h2>
+        <p class="lede">行ホバー / 選択状態をサポート。</p>
+        <div class="c-table-wrap">
+          <div class="c-table-scroll">
+            <table class="c-table">
+              <thead>
+                <tr>
+                  <th>日付</th>
+                  <th>場所</th>
+                  <th>区分</th>
+                  <th>カテゴリ</th>
+                  <th>状態</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2026-05-06</td>
+                  <td>木津駅東口</td>
+                  <td>物損</td>
+                  <td>歩行者接触</td>
+                  <td><span class="c-badge c-badge--warning">要確認</span></td>
+                </tr>
+                <tr class="is-selected">
+                  <td>2026-04-02</td>
+                  <td>松井山手駅ロータリー</td>
+                  <td>物損</td>
+                  <td>後退時接触</td>
+                  <td><span class="c-badge c-badge--success">対応済</span></td>
+                </tr>
+                <tr>
+                  <td>2026-03-08</td>
+                  <td>宇治橋西詰交差点</td>
+                  <td>人身</td>
+                  <td>追突</td>
+                  <td><span class="c-badge c-badge--danger">重大</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="nav">
+        <h2>ナビゲーション</h2>
+        <p class="lede">タブ、ピル、パンくず。</p>
+        <div class="c-tabs" role="tablist">
+          <button class="c-tab" role="tab" aria-selected="true">概要</button>
+          <button class="c-tab" role="tab" aria-selected="false">地図</button>
+          <button class="c-tab" role="tab" aria-selected="false">一覧</button>
+          <button class="c-tab" role="tab" aria-selected="false">集計</button>
+        </div>
+        <div style="height:16px"></div>
+        <div class="c-pills">
+          <button class="c-pill" aria-pressed="true">すべて</button>
+          <button class="c-pill" aria-pressed="false">事故</button>
+          <button class="c-pill" aria-pressed="false">違反</button>
+          <button class="c-pill" aria-pressed="false">取り締まり</button>
+          <button class="c-pill" aria-pressed="false">乗車位置</button>
+        </div>
+        <div style="height:16px"></div>
+        <nav class="c-breadcrumb" aria-label="パンくず">
+          <a href="#">ダッシュボード</a>
+          <span class="c-breadcrumb__sep">›</span>
+          <a href="#">事故</a>
+          <span class="c-breadcrumb__sep">›</span>
+          <span aria-current="page">A-014 詳細</span>
+        </nav>
+      </section>
+
+      <section class="showcase-section" id="progress">
+        <h2>プログレス / 集計バー</h2>
+        <p class="lede"><code class="token">.c-progress</code> と既存の集計バー互換 <code class="token">.c-bar-row</code>。</p>
+        <div class="c-progress" style="margin-bottom:16px"><div class="c-progress__bar" style="width:62%"></div></div>
+        <div style="display:grid;gap:8px;">
+          <div class="c-bar-row">
+            <span>朝（7-10時）</span>
+            <div class="c-progress"><div class="c-progress__bar" style="width:80%"></div></div>
+            <strong>42</strong>
+          </div>
+          <div class="c-bar-row">
+            <span>昼（10-16時）</span>
+            <div class="c-progress"><div class="c-progress__bar" style="width:48%"></div></div>
+            <strong>25</strong>
+          </div>
+          <div class="c-bar-row">
+            <span>夕（16-19時）</span>
+            <div class="c-progress"><div class="c-progress__bar" style="width:96%"></div></div>
+            <strong>51</strong>
+          </div>
+          <div class="c-bar-row">
+            <span>夜（19-翌5時）</span>
+            <div class="c-progress"><div class="c-progress__bar" style="width:18%"></div></div>
+            <strong>10</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="avatars">
+        <h2>アバター</h2>
+        <div class="showcase-row">
+          <span class="c-avatar c-avatar--sm">山</span>
+          <span class="c-avatar">城</span>
+          <span class="c-avatar c-avatar--lg">弥</span>
+          <div class="c-avatar-stack" aria-label="3名">
+            <span class="c-avatar">A</span>
+            <span class="c-avatar">B</span>
+            <span class="c-avatar">C</span>
+            <span class="c-avatar">+5</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="tooltip">
+        <h2>ツールチップ</h2>
+        <p class="lede">CSSのみ、ホバー / フォーカスで表示。</p>
+        <div class="showcase-row">
+          <span class="c-tooltip">
+            <button class="c-btn c-btn--secondary">再読み込み</button>
+            <span class="c-tooltip__content" role="tooltip">data/*.csv を再取得</span>
+          </span>
+          <span class="c-tooltip">
+            <button class="c-btn c-btn--ghost">印刷</button>
+            <span class="c-tooltip__content" role="tooltip">A4で最適化されます</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="modal">
+        <h2>モーダル</h2>
+        <p class="lede">クリックで表示、Escapeまたは背景クリックで閉じます。</p>
+        <button class="c-btn" id="openModal">モーダルを開く</button>
+
+        <div class="c-modal-backdrop" id="modalBackdrop" hidden>
+          <div class="c-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <header class="c-modal__header">
+              <h3 class="c-modal__title" id="modalTitle">事故レコードの削除</h3>
+              <button class="c-modal__close" id="closeModal" aria-label="閉じる">×</button>
+            </header>
+            <div class="c-modal__body">
+              <p>A-014（松井山手駅ロータリー / 2026-04-02）を削除します。この操作は取り消せません。</p>
+            </div>
+            <footer class="c-modal__footer">
+              <button class="c-btn c-btn--secondary" data-modal-dismiss>キャンセル</button>
+              <button class="c-btn c-btn--danger" data-modal-dismiss>削除する</button>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase-section" id="skeleton">
+        <h2>スケルトン</h2>
+        <p class="lede">読み込み中のプレースホルダ。</p>
+        <div class="showcase-grid">
+          <div class="c-card">
+            <span class="c-skeleton c-skeleton--title"></span>
+            <div style="height:8px"></div>
+            <span class="c-skeleton"></span>
+            <div style="height:6px"></div>
+            <span class="c-skeleton" style="width:80%"></span>
+            <div style="height:6px"></div>
+            <span class="c-skeleton" style="width:50%"></span>
+          </div>
+          <div class="c-card" style="display:flex;gap:12px;align-items:center;">
+            <span class="c-skeleton c-skeleton--circle"></span>
+            <div style="flex:1;display:grid;gap:6px;">
+              <span class="c-skeleton" style="width:60%"></span>
+              <span class="c-skeleton" style="width:90%"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <script>
+      // テーマ切り替え
+      const themes = ['theme-accidents','theme-violations','theme-enforcement','theme-pickups'];
+      document.querySelectorAll('.theme-picker button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const next = btn.dataset.theme;
+          themes.forEach(t => document.body.classList.remove(t));
+          document.body.classList.add(next);
+          document.querySelectorAll('.theme-picker button').forEach(b => {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+        });
+      });
+
+      // タブ / ピル / ボタングループのトグル
+      document.querySelectorAll('[role="tablist"]').forEach(list => {
+        list.addEventListener('click', e => {
+          const tab = e.target.closest('[role="tab"]');
+          if (!tab) return;
+          list.querySelectorAll('[role="tab"]').forEach(t => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+        });
+      });
+      document.querySelectorAll('.c-pills, .c-btn-group').forEach(group => {
+        group.addEventListener('click', e => {
+          const item = e.target.closest('.c-pill, .c-btn');
+          if (!item || !group.contains(item)) return;
+          group.querySelectorAll('.c-pill, .c-btn').forEach(b => b.setAttribute('aria-pressed', b === item ? 'true' : 'false'));
+        });
+      });
+
+      // モーダル
+      const backdrop = document.getElementById('modalBackdrop');
+      const openModal = () => { backdrop.hidden = false; };
+      const closeModal = () => { backdrop.hidden = true; };
+      document.getElementById('openModal').addEventListener('click', openModal);
+      document.getElementById('closeModal').addEventListener('click', closeModal);
+      backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+      document.querySelectorAll('[data-modal-dismiss]').forEach(b => b.addEventListener('click', closeModal));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+  </body>
+</html>
