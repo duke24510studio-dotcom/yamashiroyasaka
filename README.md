@@ -117,11 +117,14 @@ http://localhost:8000/index.html?csv=https%3A%2F%2Fexample.com%2Faccidents.csv
 
 ## GitHub Pagesで公開する
 
-ビルド不要です。
+ビルド不要です。GitHub Actions ワークフロー（[`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml)）が同梱されているので、初回だけ次の設定をしてください。
 
-1. リポジトリにこのフォルダの内容をpush。
-2. `Settings → Pages` で `Deploy from a branch` を選び、`Branch: main / root` で保存。
-3. 表示されたURLを開く。
+1. リポジトリの `Settings → Pages` を開く。
+2. **Build and deployment** の **Source** で **GitHub Actions** を選ぶ（保存ボタンはなく、選んだ時点で確定）。
+3. `main` ブランチに push（または PR をマージ）すると自動でビルド・公開されます。
+4. 完了すると `https://<オーナー名>.github.io/<リポジトリ名>/` でアクセスできます。
+
+すぐに反映したい場合は、`Actions` タブで `Deploy to GitHub Pages` ワークフローを開き、**Run workflow** から手動実行できます。
 
 ## CSV形式
 
