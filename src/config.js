@@ -7,14 +7,6 @@ export const DATA_SOURCES = {
     localCsvPath: './data/violations.csv',
     remoteCsvUrl: '',
   },
-  enforcement: {
-    localCsvPath: './data/enforcement.csv',
-    remoteCsvUrl: '',
-  },
-  pickups: {
-    localCsvPath: './data/pickups.csv',
-    remoteCsvUrl: '',
-  },
 };
 
 // MapTiler FreeプランのAPIキーを設定すると、地図背景がMapTilerタイルに切り替わります。
