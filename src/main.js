@@ -66,9 +66,9 @@ setupRecordForm(
       timeBand: toTimeBand(record.time ?? ''),
     });
     populateFilters(records, elements);
-    setSourceStatus(activeSource.label, `${records.length}件（うち1件は未保存）。CSV保存で書き出してください。`);
     render();
   },
+  (message) => setSourceStatus(activeSource.label, message),
 );
 
 await loadConfiguredSource();
