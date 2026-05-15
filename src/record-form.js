@@ -1,3 +1,5 @@
+import { commitCsvToGithub, hasToken, openTokenDialog } from './github-sync.js';
+
 const CATEGORY_OPTIONS = {
   accidents: {
     type: ['物損', '人身'],
@@ -5,6 +7,7 @@ const CATEGORY_OPTIONS = {
     csvHeaders: ['id', 'date', 'time', 'location', 'lat', 'lng', 'type', 'category', 'damaged_part', 'cause', 'prevention'],
     idPrefix: 'A',
     fileName: 'accidents.csv',
+    githubPath: 'data/accidents.csv',
   },
   violations: {
     type: ['道路交通法違反', '社内基準違反'],
@@ -12,10 +15,11 @@ const CATEGORY_OPTIONS = {
     csvHeaders: ['id', 'date', 'time', 'location', 'lat', 'lng', 'type', 'category', 'detail', 'cause', 'prevention'],
     idPrefix: 'V',
     fileName: 'violations.csv',
+    githubPath: 'data/violations.csv',
   },
 };
 
-export function setupRecordForm(appConfig, getRecords, addRecord) {
+export function setupRecordForm(appConfig, getRecords, addRecord, onStatus) {
   const opts = CATEGORY_OPTIONS[appConfig.id] ?? CATEGORY_OPTIONS.accidents;
   const dialog = buildDialog(opts, appConfig);
   document.body.appendChild(dialog);
@@ -27,14 +31,15 @@ export function setupRecordForm(appConfig, getRecords, addRecord) {
     form.reset();
     form.elements.id.value = nextId;
     form.elements.date.value = new Date().toISOString().slice(0, 10);
+    updateSyncIndicator(dialog);
     dialog.showModal();
   });
 
-  dialog.addEventListener('close', () => {
+  dialog.addEventListener('close', async () => {
     if (dialog.returnValue !== 'submit') return;
     const form = dialog.querySelector('form');
     const data = Object.fromEntries(new FormData(form));
-    addRecord({
+    const newRecord = {
       id: data.id || generateNextId(getRecords(), opts.idPrefix),
       date: data.date,
       time: data.time,
@@ -46,12 +51,54 @@ export function setupRecordForm(appConfig, getRecords, addRecord) {
       detail: data.detail,
       cause: data.cause,
       prevention: data.prevention,
-    });
+    };
+    addRecord(newRecord);
+
+    if (hasToken()) {
+      try {
+        onStatus?.('GitHubに保存中...');
+        const csv = buildCsv(getRecords(), opts);
+        await commitCsvToGithub(
+          opts.githubPath,
+          csv,
+          `${appConfig.title}: ${newRecord.id} ${newRecord.location} を追加`,
+        );
+        onStatus?.(`GitHubに保存しました。1〜2分後にサイトに反映されます。`);
+      } catch (error) {
+        console.error(error);
+        onStatus?.(`GitHubへの保存に失敗: ${error.message}（CSV保存で手動アップロードしてください）`);
+      }
+    } else {
+      onStatus?.('ローカルに追加しました。GitHub設定で自動保存を有効にできます。');
+    }
   });
 
   document.querySelector('#downloadButton')?.addEventListener('click', () => {
     downloadCsv(getRecords(), opts);
   });
+
+  document.querySelector('#tokenButton')?.addEventListener('click', () => {
+    openTokenDialog(() => {
+      updateSyncIndicator(dialog);
+      onStatus?.(hasToken() ? 'GitHub自動保存が有効になりました。' : 'GitHub自動保存を解除しました。');
+    });
+  });
+
+  updateSyncIndicator(dialog);
+}
+
+function updateSyncIndicator(dialog) {
+  const indicator = dialog.querySelector('.record-form__sync');
+  if (!indicator) return;
+  if (hasToken()) {
+    indicator.textContent = '✓ 追加後、自動でGitHubに保存されます';
+    indicator.dataset.state = 'on';
+  } else {
+    indicator.textContent = '⚠ GitHub設定が未完了。今は地図上のみに反映されます';
+    indicator.dataset.state = 'off';
+  }
+  const tokenBtn = document.querySelector('#tokenButton');
+  if (tokenBtn) tokenBtn.dataset.state = hasToken() ? 'on' : 'off';
 }
 
 function buildDialog(opts, appConfig) {
@@ -88,10 +135,10 @@ function buildDialog(opts, appConfig) {
         <label class="record-form__wide">再発防止 / 改善ポイント<input name="prevention"></label>
       </div>
       <footer class="record-form__foot">
-        <p class="record-form__hint">追加後、「CSV保存」ボタンでファイルを保存し、GitHubの<code>data/${opts.fileName}</code>に上書きしてください。</p>
+        <p class="record-form__sync" data-state="off"></p>
         <div>
           <button type="submit" value="cancel" class="record-form__cancel">キャンセル</button>
-          <button type="submit" value="submit" class="record-form__submit">追加</button>
+          <button type="submit" value="submit" class="record-form__submit">追加して保存</button>
         </div>
       </footer>
     </form>
@@ -112,7 +159,7 @@ function generateNextId(records, prefix) {
   return `${prefix}-${String(max + 1).padStart(3, '0')}`;
 }
 
-function downloadCsv(records, opts) {
+function buildCsv(records, opts) {
   const lines = [opts.csvHeaders.join(',')];
   for (const r of records) {
     const row = opts.csvHeaders.map((h) => {
@@ -121,7 +168,11 @@ function downloadCsv(records, opts) {
     });
     lines.push(row.join(','));
   }
-  const csv = lines.join('\n') + '\n';
+  return lines.join('\n') + '\n';
+}
+
+function downloadCsv(records, opts) {
+  const csv = buildCsv(records, opts);
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
