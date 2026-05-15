@@ -61,7 +61,7 @@ select {
   justify-content: space-between;
   gap: 20px;
   padding: 18px clamp(16px, 4vw, 44px);
-  background: #10231d;
+  background: #7b1e3f;
   color: #fff;
 }
 
@@ -125,7 +125,7 @@ select {
 
 .eyebrow {
   margin: 0 0 4px;
-  color: #a6d8c9;
+  color: #f1c6cf;
   font-size: 0.82rem;
   font-weight: 700;
 }
