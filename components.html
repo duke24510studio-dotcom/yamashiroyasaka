@@ -109,16 +109,12 @@
       <div class="header-actions theme-picker" role="group" aria-label="テーマ切り替え">
         <button type="button" data-theme="theme-accidents" aria-pressed="true">事故</button>
         <button type="button" data-theme="theme-violations" aria-pressed="false">違反</button>
-        <button type="button" data-theme="theme-enforcement" aria-pressed="false">取り締まり</button>
-        <button type="button" data-theme="theme-pickups" aria-pressed="false">乗車位置</button>
       </div>
     </header>
 
     <nav class="app-nav" aria-label="マップ切り替え">
       <a href="./index.html" data-app-link="accidents">事故</a>
       <a href="./violations.html" data-app-link="violations">違反</a>
-      <a href="./enforcement.html" data-app-link="enforcement">取り締まり</a>
-      <a href="./pickups.html" data-app-link="pickups">乗車位置</a>
       <a href="./components.html" data-app-link="components" class="is-active">部品</a>
     </nav>
 
@@ -373,8 +369,6 @@
           <button class="c-pill" aria-pressed="true">すべて</button>
           <button class="c-pill" aria-pressed="false">事故</button>
           <button class="c-pill" aria-pressed="false">違反</button>
-          <button class="c-pill" aria-pressed="false">取り締まり</button>
-          <button class="c-pill" aria-pressed="false">乗車位置</button>
         </div>
         <div style="height:16px"></div>
         <nav class="c-breadcrumb" aria-label="パンくず">
@@ -493,7 +487,7 @@
 
     <script>
       // テーマ切り替え
-      const themes = ['theme-accidents','theme-violations','theme-enforcement','theme-pickups'];
+      const themes = ['theme-accidents','theme-violations'];
       document.querySelectorAll('.theme-picker button').forEach(btn => {
         btn.addEventListener('click', () => {
           const next = btn.dataset.theme;

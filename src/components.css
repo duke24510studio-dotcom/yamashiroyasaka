@@ -1,6 +1,6 @@
 /* 山城ヤサカ交通 コンポーネントライブラリ
    既存の styles.css と同じトークン体系（--bg / --panel / --ink / --muted / --line / --accent / --warning / --shadow）に乗ります。
-   テーマクラス（.theme-accidents / .theme-violations / .theme-enforcement / .theme-pickups）で配色を切り替えられます。 */
+   テーマクラス（.theme-accidents / .theme-violations）で配色を切り替えられます。 */
 
 :root {
   --c-radius: 8px;
