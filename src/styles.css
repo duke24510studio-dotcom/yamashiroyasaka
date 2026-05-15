@@ -672,3 +672,27 @@ tbody tr.is-selected {
     grid-template-columns: 1fr;
   }
 }
+
+.github-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px;
+  background: #24292f;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 14px;
+  text-decoration: none;
+}
+
+.github-button:hover {
+  background: #1a1f24;
+}
+
+@media print {
+  .github-button {
+    display: none;
+  }
+}
