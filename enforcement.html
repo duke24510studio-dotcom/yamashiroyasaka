@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="./src/styles.css">
   </head>
   <body data-app="enforcement" class="theme-enforcement">
+    <div class="site-top">
     <header class="app-header">
-      <div>
+      <div class="brand-lockup">
+        <img class="brand-logo" src="./assets/logo.png" alt="yasaka">
+        <div>
         <p id="appEyebrow" class="eyebrow"></p>
         <h1 id="appTitle"></h1>
+        </div>
       </div>
       <div class="header-actions">
         <button id="reloadButton" type="button">再読み込み</button>
@@ -28,6 +32,7 @@
       <a href="./enforcement.html" data-app-link="enforcement">取り締まり</a>
       <a href="./pickups.html" data-app-link="pickups">乗車位置</a>
     </nav>
+    </div>
     <main class="dashboard">
       <section class="data-source" aria-label="データ元"><div><span>データ元</span><strong id="sourceLabel">確認中</strong></div><p id="sourceStatus">データを読み込んでいます。</p></section>
       <section class="filters" aria-label="データの絞り込み"><div class="filter-grid"><label>年<select id="yearFilter"></select></label><label>月<select id="monthFilter"></select></label><label id="typeFilterLabel">区分<select id="typeFilter"></select></label><label id="categoryFilterLabel">カテゴリ<select id="categoryFilter"></select></label><label class="search-field">検索<input id="searchInput" type="search" placeholder="場所・概要"></label></div></section>
