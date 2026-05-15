@@ -65,14 +65,56 @@ select {
   font: inherit;
 }
 
+.site-top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 2px 14px rgba(15, 32, 26, 0.1);
+}
+
+@media print {
+  .site-top {
+    position: static;
+    box-shadow: none;
+  }
+}
+
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 22px clamp(16px, 4vw, 44px);
+  padding: 18px clamp(16px, 4vw, 44px);
   background: #10231d;
   color: #fff;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.brand-lockup .brand-logo {
+  display: block;
+  height: 44px;
+  width: auto;
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .brand-lockup {
+    gap: 10px;
+  }
+  .brand-lockup .brand-logo {
+    height: 32px;
+    padding: 4px 8px;
+  }
 }
 
 .app-nav {

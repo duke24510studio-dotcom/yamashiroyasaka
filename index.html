@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="./src/styles.css">
   </head>
   <body data-app="accidents" class="theme-accidents">
+    <div class="site-top">
     <header class="app-header">
-      <div>
+      <div class="brand-lockup">
+        <img class="brand-logo" src="./assets/logo.png" alt="yasaka">
+        <div>
         <p id="appEyebrow" class="eyebrow">山城ヤサカ交通 安全管理</p>
         <h1 id="appTitle">交通事故発生マップ</h1>
+        </div>
       </div>
       <div class="header-actions">
         <button id="reloadButton" type="button">再読み込み</button>
@@ -29,6 +33,7 @@
       <a href="./enforcement.html" data-app-link="enforcement">取り締まり</a>
       <a href="./pickups.html" data-app-link="pickups">乗車位置</a>
     </nav>
+    </div>
 
     <main class="dashboard">
       <section class="data-source" aria-label="データ元">
