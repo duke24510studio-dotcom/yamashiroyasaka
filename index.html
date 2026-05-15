@@ -20,8 +20,8 @@
       <div class="header-actions">
         <button id="reloadButton" type="button">再読み込み</button>
         <label class="file-button">
-          CSV読込
-          <input id="csvInput" type="file" accept=".csv,text/csv">
+          データ読込
+          <input id="csvInput" type="file" accept=".csv,text/csv,.xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
         </label>
         <button id="printButton" type="button">印刷</button>
       </div>
@@ -136,6 +136,7 @@
     </main>
 
     <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
