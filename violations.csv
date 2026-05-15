@@ -1,34 +1,8 @@
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+﻿id,date,time,location,lat,lng,type,category,damaged_part,cause,prevention
+A-001,2026/5/10,13:11,タイムズ四条烏丸,35.00476261,135.7602095,自損,後退時接触,天井,立体駐車場にて天井右上部分を突起物に当てる,車高と後退前の降車確認を徹底
+A-002,2026/5/2,12:34,精華町山田下川原13-2,34.73705167,135.7926487,自損,接触,後部左側バンパー,駐車場での転回時に、ガードレールに接触,見通しの悪い場所では降車してでも確認すること
+A-003,2026/5/2,13:52,京都市下京区不明門通五条下る上平野町４５５−１,34.99554642,135.7603929,自損,接触,前部右側バンパー,楊梅通を東進、不明門通で北進する際、いけず石へ接触,深夜帯の暗く見通しの悪い狭路では、一時停止して通行余地を確認
+A-004,2026/4/20,17:22,京都市左京区杉本町255-1,35.01375585,135.7744983,自損,接触,前部左側ドア,過信による細街路にて電柱との接触,発進前に周囲確認を行い無理なルートを避ける
+A-005,2026/4/20,9:33,宇治市広野町寺山１７−２１７,34.87104247,135.7824214,自損,接触,後部右側バンパー,他に気を取られバック走行した際に、住宅の壁に接触,バック走行の際は常に車両の左右の動きを確認すること
+A-006,2026/4/15,11:34,烏丸夷川通,35.0148178,135.7593032,自損,後退時接触,後部左側バンパー,車が斜めに止まったので、バック走行した際に壁に接触,バック走行の際は常に車両の左右の動きを確認すること
+A-007,2026/4/12,19:15,京都市東山区中之町１９４−７,35.00892439,135.7848564,自損,後退時接触,左ミラー,乗降後の発進時に歩道側確認が不足,発進前の歩道側確認と声出し確認を徹底
