@@ -2,6 +2,7 @@ import { getCurrentAppConfig } from './app-configs.js';
 import { getConfiguredCsvSource, loadRecords, parseRecordCsv } from './data.js';
 import { applyFilters, describeActiveFilters, populateFilters, setupFilters } from './filters.js';
 import { focusMarker, initMap, renderMarkers } from './map.js';
+import { setupRecordForm } from './record-form.js';
 
 const appConfig = getCurrentAppConfig();
 
@@ -54,8 +55,34 @@ setupFilters(elements, render);
 elements.printButton.addEventListener('click', () => window.print());
 elements.reloadButton.addEventListener('click', () => loadConfiguredSource());
 elements.csvInput.addEventListener('change', loadUserCsv);
+setupRecordForm(
+  appConfig,
+  () => records,
+  (record) => {
+    records.push({
+      ...record,
+      year: record.date?.slice(0, 4) ?? '',
+      month: record.date?.slice(5, 7) ?? '',
+      timeBand: toTimeBand(record.time ?? ''),
+    });
+    populateFilters(records, elements);
+    setSourceStatus(activeSource.label, `${records.length}件（うち1件は未保存）。CSV保存で書き出してください。`);
+    render();
+  },
+);
 
 await loadConfiguredSource();
+
+function toTimeBand(time) {
+  const hour = Number(String(time).slice(0, 2));
+  if (!Number.isFinite(hour)) return '不明';
+  if (hour < 6) return '深夜';
+  if (hour < 10) return '朝';
+  if (hour < 14) return '昼';
+  if (hour < 18) return '夕方';
+  if (hour < 22) return '夜';
+  return '深夜';
+}
 
 async function loadConfiguredSource() {
   try {
