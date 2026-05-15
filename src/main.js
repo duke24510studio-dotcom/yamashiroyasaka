@@ -182,12 +182,52 @@ async function loadUserCsv(event) {
   const [file] = event.target.files;
   if (!file) return;
 
-  records = parseRecordCsv(await file.text());
+  const isExcel = /\.(xlsx|xls)$/i.test(file.name);
+  let csvText;
+  let sourceLabel;
+  if (isExcel) {
+    csvText = await readExcelAsCsv(file, appConfig.id);
+    sourceLabel = '手元のExcelファイル';
+  } else {
+    csvText = await file.text();
+    sourceLabel = '手元のCSVファイル';
+  }
+
+  records = parseRecordCsv(csvText);
   selectedId = null;
-  activeSource = { source: file.name, label: '手元のCSVファイル' };
+  activeSource = { source: file.name, label: sourceLabel };
   populateFilters(records, elements);
   setSourceStatus(activeSource.label, `${records.length}件の${appConfig.sourceName}を読み込みました。`);
   render();
+
+  event.target.value = '';
+}
+
+async function readExcelAsCsv(file, appId) {
+  if (typeof XLSX === 'undefined') {
+    throw new Error('Excel 読込ライブラリが読み込まれていません。ページを再読み込みしてください。');
+  }
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: 'array' });
+
+  const preferred = { accidents: '事故', violations: '違反' }[appId];
+  const candidates = [preferred, ...workbook.SheetNames];
+  let pickedSheet = null;
+  for (const name of candidates) {
+    if (!name) continue;
+    const sheet = workbook.Sheets[name];
+    if (!sheet) continue;
+    const csv = XLSX.utils.sheet_to_csv(sheet);
+    const firstLine = csv.split(/\r?\n/, 1)[0] ?? '';
+    if (/(^|,)(id|date|location|lat|lng)(,|$)/i.test(firstLine)) {
+      pickedSheet = csv;
+      break;
+    }
+  }
+  if (!pickedSheet) {
+    throw new Error('Excelファイルから列名(id,date,location...)を含むシートが見つかりませんでした。');
+  }
+  return pickedSheet;
 }
 
 function applyAppText() {

@@ -20,8 +20,8 @@
       <div class="header-actions">
         <button id="reloadButton" type="button">再読み込み</button>
         <label class="file-button">
-          CSV読込
-          <input id="csvInput" type="file" accept=".csv,text/csv">
+          データ読込
+          <input id="csvInput" type="file" accept=".csv,text/csv,.xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
         </label>
         <button id="printButton" type="button">印刷</button>
       </div>
@@ -39,6 +39,7 @@
       <section class="table-panel" aria-label="一覧"><div class="table-heading"><h2 id="listTitle"></h2><p id="activeFilterText">全件を表示中</p></div><div class="table-wrap"><table><thead><tr><th data-table-key="date"></th><th data-table-key="time"></th><th data-table-key="location"></th><th data-table-key="type"></th><th data-table-key="category"></th><th data-table-key="detail"></th><th data-table-key="cause"></th></tr></thead><tbody id="accidentTable"></tbody></table></div></section>
     </main>
     <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
