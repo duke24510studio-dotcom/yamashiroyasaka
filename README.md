@@ -1,6 +1,6 @@
 # 交通事故発生マップ
 
-山城ヤサカ交通の安全管理・運行分析向けに、交通事故、交通違反、取り締まり情報、お客様の乗車位置を地図・一覧・集計グラフで確認する静的Webアプリです。個人情報を扱わない前提で、地点、日付、区分、カテゴリ、概要、注意ポイントを可視化します。
+山城ヤサカ交通の安全管理向けに、交通事故と交通違反を地図・一覧・集計グラフで確認する静的Webアプリです。個人情報を扱わない前提で、地点、日付、区分、カテゴリ、概要、注意ポイントを可視化します。
 
 ## ファイル構成（とてもシンプル）
 
@@ -8,17 +8,15 @@
 .
 ├── index.html         交通事故発生マップ
 ├── violations.html    交通違反マップ
-├── enforcement.html   取り締まり情報マップ
-├── pickups.html       お客様の乗車位置マップ
-├── data/              4ページが読み込むCSV（書き換えればそのまま反映）
+├── components.html    UIコンポーネントライブラリ（ショーケース）
+├── data/              各ページが読み込むCSV（書き換えればそのまま反映）
 │   ├── accidents.csv
-│   ├── violations.csv
-│   ├── enforcement.csv
-│   └── pickups.csv
+│   └── violations.csv
 └── src/
-    ├── config.js      CSVの場所とMapTilerキーだけを書く設定ファイル
-    ├── app.js         アプリ本体（地図・絞り込み・集計・一覧）
-    └── styles.css     スタイル
+    ├── config.js       CSVの場所とMapTilerキーだけを書く設定ファイル
+    ├── app.js          アプリ本体（地図・絞り込み・集計・一覧）
+    ├── styles.css      4ページ共通スタイル
+    └── components.css  汎用UIコンポーネント（ボタン・カード・フォーム など）
 ```
 
 ビルド不要・依存パッケージなし。CSVを差し替えれば常に最新内容が読み込まれます（毎回キャッシュを回避して取得）。
@@ -27,7 +25,7 @@
 
 - MapLibre GL JS による地点マップ
 - MapTiler APIキー設定時はMapTilerタイル、未設定時はOpenStreetMapタイルを表示
-- 4ページ構成（事故・違反・取り締まり・乗車位置）
+- 2ページ構成（事故・違反）
 - 同梱CSV / Googleスプレッドシート公開CSV / 任意のCSV URL / 手元のCSVファイル の読込
 - 年・月・区分・カテゴリでの絞り込みと、場所・対象・概要のキーワード検索
 - 一覧クリックで地図ピンへ移動
@@ -54,8 +52,6 @@ python -m http.server 8000
 | --- | --- | --- |
 | 交通事故発生マップ | `index.html` | `data/accidents.csv` |
 | 交通違反マップ | `violations.html` | `data/violations.csv` |
-| 取り締まり情報マップ | `enforcement.html` | `data/enforcement.csv` |
-| お客様の乗車位置マップ | `pickups.html` | `data/pickups.csv` |
 
 ## Googleスプレッドシートをデータ元にする
 
@@ -67,8 +63,6 @@ python -m http.server 8000
 export const CSV_SOURCES = {
   accidents: 'https://docs.google.com/spreadsheets/d/e/xxxxxxxx/pub?gid=0&single=true&output=csv',
   violations: './data/violations.csv',
-  enforcement: './data/enforcement.csv',
-  pickups: './data/pickups.csv',
 };
 ```
 
@@ -93,17 +87,48 @@ http://localhost:8000/index.html?csv=https%3A%2F%2Fexample.com%2Faccidents.csv
 
 外部CSVを使う場合、公開元がブラウザからの読み込みを許可している必要があります。Googleスプレッドシートの「ウェブに公開」CSVはこの用途に向いています。
 
+## コンポーネントライブラリ
+
+`components.html` は、サイト全体で使うUI部品の一覧と利用例を集めたショーケースページです。各ページのナビ「部品」からも開けます。
+
+- スタイルは [`src/components.css`](./src/components.css) に独立。既存の `styles.css` が定義するテーマ変数（`--accent` `--panel` `--line` など）に乗ります。
+- ショーケース右上のボタンで2テーマ（事故 / 違反）の配色を切り替えて確認できます。
+- すべての部品クラスは `c-` プレフィックス付きで、既存ページのスタイルとは衝突しません。
+
+含まれる部品：
+
+| 種類 | 主なクラス |
+| --- | --- |
+| ボタン | `.c-btn` `.c-btn--secondary` `.c-btn--ghost` `.c-btn--danger` `.c-btn-group` |
+| バッジ | `.c-badge` `.c-badge--success` `.c-badge--warning` `.c-badge--danger` |
+| カード | `.c-card` `.c-card--accent` `.c-stat`（統計カード） |
+| フォーム | `.c-field` `.c-input` `.c-select` `.c-textarea` `.c-check` `.c-switch` |
+| アラート | `.c-alert` `.c-alert--warning` `.c-alert--danger` `.c-alert--success` |
+| テーブル | `.c-table` `.c-table-wrap` |
+| ナビ | `.c-tabs` `.c-pills` `.c-breadcrumb` |
+| その他 | `.c-progress` `.c-avatar` `.c-tooltip` `.c-modal` `.c-skeleton` |
+
+新しいページでこれらを使う場合は、`styles.css` の後に `components.css` を読み込んでください。
+
+```html
+<link rel="stylesheet" href="./src/styles.css">
+<link rel="stylesheet" href="./src/components.css">
+```
+
 ## GitHub Pagesで公開する
 
-ビルド不要です。
+ビルド不要です。GitHub Actions ワークフロー（[`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml)）が同梱されているので、初回だけ次の設定をしてください。
 
-1. リポジトリにこのフォルダの内容をpush。
-2. `Settings → Pages` で `Deploy from a branch` を選び、`Branch: main / root` で保存。
-3. 表示されたURLを開く。
+1. リポジトリの `Settings → Pages` を開く。
+2. **Build and deployment** の **Source** で **GitHub Actions** を選ぶ（保存ボタンはなく、選んだ時点で確定）。
+3. `main` ブランチに push（または PR をマージ）すると自動でビルド・公開されます。
+4. 完了すると `https://<オーナー名>.github.io/<リポジトリ名>/` でアクセスできます。
+
+すぐに反映したい場合は、`Actions` タブで `Deploy to GitHub Pages` ワークフローを開き、**Run workflow** から手動実行できます。
 
 ## CSV形式
 
-各CSVは同じ列名で作成します（事故データは既存互換のため `damaged_part` も読み込めますが、新規作成では `detail` を使うと4ページで統一できます）。
+各CSVは同じ列名で作成します（事故データは既存互換のため `damaged_part` も読み込めますが、新規作成では `detail` を使うと両ページで統一できます）。
 
 | 列名 | 内容 |
 | --- | --- |
@@ -114,20 +139,14 @@ http://localhost:8000/index.html?csv=https%3A%2F%2Fexample.com%2Faccidents.csv
 | lat | 緯度 |
 | lng | 経度 |
 | type | 区分（例: 物損 / 人身、道路交通法違反 など） |
-| category | カテゴリ（例: 追突、後退時接触、速度取締、ヤサカ無線 など） |
+| category | カテゴリ（例: 追突、後退時接触 など） |
 | detail | 損傷部位／対象／確認対象など |
 | cause | 原因・概要 |
 | prevention | 再発防止／改善ポイント |
 
-お客様の乗車位置マップでは、`category` に次の3種類を入れます。
-
-- `ヤサカ無線`
-- `GOアプリ`
-- `DiDi`
-
 ## 個人情報の扱い
 
-このアプリは、運転者名、乗客名、連絡先、車両番号、予約者名などの個人や個別車両を特定しやすい情報を表示しない前提で設計しています。乗車位置データも個人単位の履歴ではなく、地点と種別の集計・記録として扱ってください。CSVやスプレッドシートにも個人情報を含めないでください。
+このアプリは、運転者名、乗客名、連絡先、車両番号、予約者名などの個人や個別車両を特定しやすい情報を表示しない前提で設計しています。CSVやスプレッドシートにも個人情報を含めないでください。
 
 ## 外部ライブラリ・サービス
 
