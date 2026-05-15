@@ -73,8 +73,6 @@ function getMarkerColor(appId) {
   const colors = {
     accidents: '#0f7b63',
     violations: '#9a4f1f',
-    enforcement: '#246b86',
-    pickups: '#5c5aa7',
   };
   return colors[appId] ?? '#0f7b63';
 }
