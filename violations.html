@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>交通事故発生マップ | 山城ヤサカ交通</title>
+    <title>交通違反マップ | 山城ヤサカ交通</title>
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
     <link rel="stylesheet" href="./src/styles.css">
   </head>
-  <body data-app="accidents">
+  <body data-app="violations" class="theme-violations">
     <header class="app-header">
       <div class="brand-lockup">
         <span class="brand-logo-frame"><img class="brand-logo" src="./assets/logo.webp" alt="yasaka"></span>
         <div>
-          <p id="appEyebrow" class="eyebrow">山城ヤサカ交通 安全管理</p>
-          <h1 id="appTitle">交通事故発生マップ</h1>
+          <p id="appEyebrow" class="eyebrow">山城ヤサカ交通 コンプライアンス確認</p>
+          <h1 id="appTitle">交通違反マップ</h1>
         </div>
       </div>
       <div class="header-actions">
@@ -33,10 +33,7 @@
 
     <main class="dashboard">
       <section class="data-source" aria-label="データ元">
-        <div>
-          <span>データ元</span>
-          <strong id="sourceLabel">確認中</strong>
-        </div>
+        <div><span>データ元</span><strong id="sourceLabel">確認中</strong></div>
         <p id="sourceStatus">データを読み込んでいます。</p>
       </section>
 
@@ -52,39 +49,37 @@
 
       <section class="summary" aria-label="集計サマリー">
         <article><span id="totalLabel">表示件数</span><strong id="totalCount">0</strong></article>
-        <article><span id="topCategoryLabel">最多カテゴリ</span><strong id="topCategory">-</strong></article>
+        <article><span id="topCategoryLabel">最多違反</span><strong id="topCategory">-</strong></article>
         <article><span>最多時間帯</span><strong id="topTimeBand">-</strong></article>
         <article><span id="topLocationLabel">重点場所</span><strong id="topLocation">-</strong></article>
       </section>
 
       <section class="workspace">
-        <div class="map-panel">
-          <div id="map" aria-label="交通事故発生地点の地図"></div>
-        </div>
+        <div class="map-panel"><div id="map" aria-label="交通違反地点の地図"></div></div>
         <aside class="insight-panel" aria-label="集計とポイント">
           <section><h2>時間帯別</h2><div id="timeStats" class="bar-list"></div></section>
-          <section><h2>カテゴリ別</h2><div id="categoryStats" class="bar-list"></div></section>
+          <section><h2>違反カテゴリ別</h2><div id="categoryStats" class="bar-list"></div></section>
           <section><h2>場所別</h2><div id="locationStats" class="bar-list"></div></section>
-          <section><h2 id="preventionTitle">再発防止ポイント</h2><ul id="preventionList" class="prevention-list"></ul></section>
+          <section><h2 id="preventionTitle">改善ポイント</h2><ul id="preventionList" class="prevention-list"></ul></section>
         </aside>
       </section>
 
       <section class="table-panel" aria-label="一覧">
         <div class="table-heading">
-          <h2 id="listTitle">事故一覧</h2>
+          <h2 id="listTitle">違反一覧</h2>
           <p id="activeFilterText">全件を表示中</p>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th data-table-key="date">発生日</th>
+                <th data-table-key="date">確認日</th>
                 <th data-table-key="time">時間</th>
                 <th data-table-key="location">場所</th>
-                <th data-table-key="type">事故区分</th>
-                <th data-table-key="category">カテゴリ</th>
-                <th data-table-key="detail">損傷部位</th>
-                <th data-table-key="cause">原因概要</th>
+                <th data-table-key="type">違反区分</th>
+                <th data-table-key="category">違反カテゴリ</th>
+                <th data-table-key="detail">対象</th>
+                <th data-table-key="cause">違反概要</th>
               </tr>
             </thead>
             <tbody id="recordTable"></tbody>
