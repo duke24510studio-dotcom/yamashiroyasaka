@@ -7,6 +7,7 @@ const APPS = {
     sourceName: '事故データ',
     listTitle: '事故一覧',
     searchPlaceholder: '場所・損傷部位・原因概要',
+    csvFileName: 'accidents_template.csv',
     labels: {
       type: '事故区分',
       category: 'カテゴリ',
@@ -31,6 +32,7 @@ const APPS = {
     sourceName: '違反データ',
     listTitle: '違反一覧',
     searchPlaceholder: '場所・対象・違反概要',
+    csvFileName: 'violations_template.csv',
     labels: {
       type: '違反区分',
       category: '違反カテゴリ',
@@ -52,6 +54,7 @@ const APPS = {
 };
 
 const TIME_ORDER = ['朝', '昼', '夕方', '夜', '深夜', '不明'];
+const TEMPLATE_HEADERS = ['日付', '時間', '場所', '緯度', '経度', '区分', 'カテゴリ', '詳細', '概要', 'ポイント'];
 const appId = document.body.dataset.app || 'accidents';
 const config = APPS[appId] || APPS.accidents;
 let records = [];
@@ -79,6 +82,7 @@ const elements = {
   csvInput: $('#csvInput'),
   reload: $('#reloadButton'),
   print: $('#printButton'),
+  template: $('#templateButton'),
   totalCount: $('#totalCount'),
   topCategory: $('#topCategory'),
   topTimeBand: $('#topTimeBand'),
@@ -142,6 +146,7 @@ function bindEvents() {
   });
   elements.reload.addEventListener('click', loadConfiguredCsv);
   elements.print.addEventListener('click', () => window.print());
+  elements.template?.addEventListener('click', downloadTemplate);
   elements.csvInput.addEventListener('click', () => {
     elements.csvInput.value = '';
   });
@@ -187,8 +192,7 @@ async function loadConfiguredCsv() {
   try {
     activeSourceLabel = '同梱CSV';
     setStatus(activeSourceLabel, `${config.sourceName}を読み込んでいます。`);
-    const source = csvSource();
-    records = parseCsvText(await fetchText(source));
+    records = parseCsvText(await fetchText(csvSource()));
     resetFilters();
     populateFilters();
     setStatus(activeSourceLabel, loadedMessage(records.length));
@@ -249,7 +253,7 @@ function parseCsvText(text) {
       const source = Object.fromEntries(normalized.map((header, i) => [header, row[i] ?? '']));
       const date = source.date || '';
       const { year, month } = dateParts(date);
-      const record = {
+      return {
         id: source.id || `row-${index + 1}`,
         date,
         year,
@@ -265,7 +269,6 @@ function parseCsvText(text) {
         cause: source.cause || '',
         prevention: source.prevention || '',
       };
-      return record;
     })
     .filter((record) => Number.isFinite(record.lat) && Number.isFinite(record.lng));
 }
@@ -333,6 +336,7 @@ function normalizeHeader(header) {
     事故区分: 'type',
     違反区分: 'type',
     カテゴリ: 'category',
+    違反カテゴリ: 'category',
     種別: 'category',
     分類: 'category',
     損傷部位: 'detail',
@@ -366,7 +370,9 @@ function timeBand(time) {
 }
 
 function toNumber(value) {
-  const normalized = String(value ?? '').trim().replace(/[０-９．－]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0));
+  const normalized = String(value ?? '')
+    .trim()
+    .replace(/[０-９．－]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0));
   return Number(normalized);
 }
 
@@ -592,6 +598,27 @@ function emptyText(text) {
   return span;
 }
 
+function downloadTemplate() {
+  const sample =
+    appId === 'accidents'
+      ? ['A-001', '2026/5/10', '13:11', 'タイムズ四条烏丸', '35.00476261', '135.7602095', '自損', '後退時接触', '天井', '立体駐車場で接触', '車高と後退前確認を徹底']
+      : ['V-001', '2026/5/10', '08:20', '近鉄大久保駅前', '34.874240', '135.778200', '道路交通法違反', '一時停止不履行', '交差点進入', '停止確認が不十分', '停止線手前で完全停止'];
+  const rows = [['id', ...TEMPLATE_HEADERS], sample];
+  const csv = `\uFEFF${rows.map((row) => row.map(csvCell).join(',')).join('\r\n')}\r\n`;
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = config.csvFileName;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function csvCell(value) {
+  const text = String(value ?? '');
+  return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -600,4 +627,3 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
 }
-

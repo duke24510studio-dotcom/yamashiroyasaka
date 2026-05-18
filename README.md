@@ -1,10 +1,105 @@
-# AGENTS
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>交通事故発生マップ | 山城ヤサカ交通</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="./src/styles.css">
+  </head>
+  <body data-app="accidents">
+    <header class="app-header">
+      <div class="brand-lockup">
+        <span class="brand-logo-frame"><img class="brand-logo" src="./assets/logo.webp" alt="yasaka"></span>
+        <div>
+          <p id="appEyebrow" class="eyebrow">山城ヤサカ交通 安全管理</p>
+          <h1 id="appTitle">交通事故発生マップ</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="reloadButton" type="button">再読み込み</button>
+        <label class="file-button">
+          CSV読込
+          <input id="csvInput" type="file" accept=".csv,text/csv">
+        </label>
+        <button id="templateButton" type="button">CSVひな形</button>
+        <button id="printButton" type="button">印刷</button>
+      </div>
+    </header>
 
-## 開発方針
+    <nav class="app-nav" aria-label="ページ切り替え">
+      <a href="./index.html" data-app-link="accidents">事故</a>
+      <a href="./violations.html" data-app-link="violations">違反</a>
+    </nav>
 
-- ビルド不要の静的HTML/CSS/JavaScriptとして保つ。
-- ページは `index.html`、`violations.html` の2つを基本とする。
-- 地図はMapLibre GL JSを使う。
-- CSVには個人情報を含めない。
-- データ列は `id,date,time,location,lat,lng,type,category,detail,cause,prevention` を標準とする。
-- 公開前にCSV読込、地図表示、フィルター、一覧クリック、印刷表示を確認する。
+    <main class="dashboard">
+      <section class="data-source" aria-label="データ元">
+        <div>
+          <span>データ元</span>
+          <strong id="sourceLabel">確認中</strong>
+        </div>
+        <p id="sourceStatus">データを読み込んでいます。</p>
+      </section>
+
+      <section class="csv-guide" aria-label="CSVの作り方">
+        <strong>CSVはこの列で作れます:</strong>
+        <span>日付, 時間, 場所, 緯度, 経度, 区分, カテゴリ, 詳細, 概要, ポイント</span>
+      </section>
+
+      <section class="filters" aria-label="データの絞り込み">
+        <div class="filter-grid">
+          <label>年<select id="yearFilter"></select></label>
+          <label>月<select id="monthFilter"></select></label>
+          <label id="typeFilterLabel">区分<select id="typeFilter"></select></label>
+          <label id="categoryFilterLabel">カテゴリ<select id="categoryFilter"></select></label>
+          <label class="search-field">検索<input id="searchInput" type="search" placeholder="場所・概要"></label>
+        </div>
+      </section>
+
+      <section class="summary" aria-label="集計サマリー">
+        <article><span id="totalLabel">表示件数</span><strong id="totalCount">0</strong></article>
+        <article><span id="topCategoryLabel">最多カテゴリ</span><strong id="topCategory">-</strong></article>
+        <article><span>最多時間帯</span><strong id="topTimeBand">-</strong></article>
+        <article><span id="topLocationLabel">重点場所</span><strong id="topLocation">-</strong></article>
+      </section>
+
+      <section class="workspace">
+        <div class="map-panel">
+          <div id="map" aria-label="交通事故発生地点の地図"></div>
+        </div>
+        <aside class="insight-panel" aria-label="集計とポイント">
+          <section><h2>時間帯別</h2><div id="timeStats" class="bar-list"></div></section>
+          <section><h2>カテゴリ別</h2><div id="categoryStats" class="bar-list"></div></section>
+          <section><h2>場所別</h2><div id="locationStats" class="bar-list"></div></section>
+          <section><h2 id="preventionTitle">再発防止ポイント</h2><ul id="preventionList" class="prevention-list"></ul></section>
+        </aside>
+      </section>
+
+      <section class="table-panel" aria-label="一覧">
+        <div class="table-heading">
+          <h2 id="listTitle">事故一覧</h2>
+          <p id="activeFilterText">全件を表示中</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-table-key="date">発生日</th>
+                <th data-table-key="time">時間</th>
+                <th data-table-key="location">場所</th>
+                <th data-table-key="type">事故区分</th>
+                <th data-table-key="category">カテゴリ</th>
+                <th data-table-key="detail">損傷部位</th>
+                <th data-table-key="cause">原因概要</th>
+              </tr>
+            </thead>
+            <tbody id="recordTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
