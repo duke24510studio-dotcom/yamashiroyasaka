@@ -49,23 +49,25 @@ python -m http.server 8000
 
 `data/accidents.csv` または `data/violations.csv` を差し替えます。サイト側はキャッシュを避けてCSVを取得するため、差し替え後に「再読み込み」を押すと反映されます。
 
-CSV列は次を標準にしてください。
+画面右上の「CSVひな形」から、Excelで開きやすいUTF-8 BOM付きCSVをダウンロードできます。`data/accidents_template.csv` と `data/violations_template.csv` も同じ形式です。
+
+CSV列は次を標準にしてください。英語列名でも日本語列名でも読み込めます。
 
 | 列名 | 内容 |
 | --- | --- |
 | id | 一意なID |
-| date | 日付。例: `2026-05-06` または `2026/5/6` |
-| time | 時刻。例: `10:30` |
-| location | 場所 |
-| lat | 緯度 |
-| lng | 経度 |
-| type | 区分 |
-| category | カテゴリ |
-| detail | 損傷部位、対象など |
-| cause | 原因・概要 |
-| prevention | 再発防止／改善ポイント |
+| 日付 / date | 日付。例: `2026-05-06` または `2026/5/6` |
+| 時間 / time | 時刻。例: `10:30` |
+| 場所 / location | 場所 |
+| 緯度 / lat | 緯度 |
+| 経度 / lng | 経度 |
+| 区分 / type | 区分 |
+| カテゴリ / category | カテゴリ |
+| 詳細 / detail | 損傷部位、対象など |
+| 概要 / cause | 原因・概要 |
+| ポイント / prevention | 再発防止／改善ポイント |
 
-既存互換として、`damaged_part` も `detail` として読み込みます。日本語列名、UTF-8 BOM付きCSV、Shift-JIS系CSVにも対応しています。
+既存互換として、`damaged_part` も `detail` として読み込みます。UTF-8 BOM付きCSV、Shift-JIS系CSVにも対応しています。
 
 ## Googleスプレッドシートを使う
 
