@@ -1,0 +1,14 @@
+﻿【GitHubで公開する場合】
+1. このフォルダの中身をすべて選択します。
+2. GitHubのリポジトリを開きます。
+   https://github.com/duke24510studio-dotcom/yamashiroyasaka
+3. Add file → Upload files を押します。
+4. 選択した中身をアップロードします。
+5. Commit changes を押します。
+6. Settings → Pages で Source を Deploy from a branch、Branch を main、Folder を /root にします。
+7. 公開URLを開きます。
+   https://duke24510studio-dotcom.github.io/yamashiroyasaka/index.html
+
+【大事】
+github-upload-ready フォルダごとではなく、このフォルダの中身をアップロードしてください。
+index.html の先頭が <!doctype html> なら成功です。

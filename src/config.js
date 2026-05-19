@@ -1,15 +1,8 @@
-export const DATA_SOURCES = {
-  accidents: {
-    localCsvPath: './data/accidents.csv',
-    remoteCsvUrl: '',
-  },
-  violations: {
-    localCsvPath: './data/violations.csv',
-    remoteCsvUrl: '',
-  },
+export const CSV_SOURCES = {
+  accidents: './data/accidents.csv',
+  violations: './data/violations.csv',
 };
 
-// MapTiler FreeプランのAPIキーを設定すると、地図背景がMapTilerタイルに切り替わります。
-// 未設定の場合はOpenStreetMapタイルを表示します。
 export const MAPTILER_API_KEY = '9sTROwglaOlAzPTK2UxJ';
 export const MAPTILER_MAP_STYLE = 'basic-v2';
+
